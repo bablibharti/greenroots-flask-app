@@ -9,10 +9,16 @@ def get_db():
     return sqlite3.connect("database.db")
 
 # ---------- CREATE TABLES ----------
+# ---------- CREATE TABLES ----------
 with get_db() as con:
     cur = con.cursor()
+
+    # Force recreate tables (temporary fix)
+    cur.execute("DROP TABLE IF EXISTS users")
+    cur.execute("DROP TABLE IF EXISTS plantation")
+
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS users(
+        CREATE TABLE users(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             email TEXT,
@@ -20,8 +26,9 @@ with get_db() as con:
             address TEXT
         )
     """)
+
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS plantation(
+        CREATE TABLE plantation(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user TEXT,
             plant TEXT,
